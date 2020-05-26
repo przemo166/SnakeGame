@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class GamePanel extends JPanel implements  Runnable , KeyListener {
@@ -24,10 +25,14 @@ public class GamePanel extends JPanel implements  Runnable , KeyListener {
     private Body body;
     private ArrayList<Body> snakeBody;
 
+    private Apple apple;
+    private ArrayList <Apple> apples;
+
+    private Random random;
+
     private int xCor = 10;
     private int yCor = 10;
-    private int size = 5;
-
+    private int size = 1;
 
     public GamePanel ()
     {
@@ -35,6 +40,8 @@ public class GamePanel extends JPanel implements  Runnable , KeyListener {
         addKeyListener(this);
         setPreferredSize(new Dimension(WIDTH,HEIGHT));
         snakeBody = new ArrayList<Body>();
+        apples = new ArrayList<Apple>();
+        random = new Random();
         start();
     }
 
@@ -72,18 +79,44 @@ public class GamePanel extends JPanel implements  Runnable , KeyListener {
             e.printStackTrace();
         }
 
-        if(right) xCor++;
-        if(left) xCor--;
-        if(up) yCor --;
-        if(down) yCor ++;
+        if (right) xCor++;
+        if (left) xCor--;
+        if (up) yCor--;
+        if (down) yCor++;
+
+        body = new Body(xCor, yCor, 20);
+        snakeBody.add(body);
+        snakeBody.remove(0);
+
+        if(apples.size()==0)
+        {
+            int xCor = random.nextInt(23);
+            int yCor = random.nextInt(23);
+
+            apple = new Apple(xCor,yCor,20);
+            apples.add(apple);
+        }
 
 
+        for(int i=0;i<apples.size();i++)
+        {
+            if(xCor==apples.get(i).getxCor()&&yCor==apples.get(i).getyCor())
+            {
+                size ++;
+                apples.remove(i);
 
-            body = new Body(xCor,yCor,20);
-            snakeBody.add(body);
-            snakeBody.remove(0);
+                if(right) body = new Body(xCor + 1 ,yCor, 20);
+                if(left)  body = new Body(xCor - 1 ,yCor, 20);
 
+                if(down)  body = new Body(xCor,yCor - 1 , 20);
+                if(up)    body = new Body(xCor,yCor + 1 , 20);
 
+                snakeBody.add(0,body);
+                i++;
+            }
+        }
+
+        
 
     }
 
@@ -103,9 +136,14 @@ public class GamePanel extends JPanel implements  Runnable , KeyListener {
             g.drawLine(0,i*10,HEIGHT,i*10);
         }
 
-        for(int i=0;i<snakeBody.size();i++)
+        for(int i=size-1;i>=0;i--)
         {
             snakeBody.get(i).draw(g);
+        }
+
+        for(int i=0;i<apples.size();i++)
+        {
+            apples.get(i).draw(g);
         }
 
     }
