@@ -116,7 +116,21 @@ public class GamePanel extends JPanel implements  Runnable , KeyListener {
             }
         }
 
-        
+        if(xCor < 0 || xCor > 29 || yCor < 0 || yCor > 29)
+        {
+            stop();
+        }
+
+        for(int i=0;i<snakeBody.size();i++)
+        {
+            if(xCor == snakeBody.get(i).getxCor() && yCor == snakeBody.get(i).getyCor() )
+            {
+                if(i != snakeBody.size()-1)
+                {
+                    stop();
+                }
+            }
+        }
 
     }
 
