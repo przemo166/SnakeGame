@@ -4,19 +4,18 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class GamePanel extends JPanel implements  Runnable , KeyListener {
+public class GamePanel extends JPanel implements KeyListener {
 
     private static final long serialVersionUID = 1L;
 
     public static final int WIDTH = 600 , HEIGHT = 600 ;
 
-    private Thread thread ;
-    private MyThread myThread;
+    private SnakeThread snakeThread;
+    private ColisionCheckThread colisionThread;
+    private AppleThread appleThread;
+    private RepaintThread repaintThread;
 
     private boolean run ;
 
@@ -26,11 +25,9 @@ public class GamePanel extends JPanel implements  Runnable , KeyListener {
     private boolean down = false;
 
     public ReentrantLock lock = new ReentrantLock();
+
     private Body body;
     private ArrayList<Body> snakeBody;
-
-
-
 
     private Apple apple;
     private ArrayList <Apple> apples;
@@ -50,49 +47,62 @@ public class GamePanel extends JPanel implements  Runnable , KeyListener {
         apples = new ArrayList<Apple>();
         random = new Random();
         start();
-        myThread = new MyThread(this);
-        myThread.start();
+
+        snakeThread = new SnakeThread(this);
+        snakeThread.start();
+
+        colisionThread = new ColisionCheckThread(this);
+        colisionThread.start();
+
+        appleThread = new AppleThread(this);
+        appleThread.start();
+
+        repaintThread = new RepaintThread(this);
+        repaintThread.start();
+
     }
 
     public void start ()
     {
         run = true;
-        thread = new Thread(this);
-        thread.start();
+
     }
 
     public void stop ()
     {
         run = false;
         try {
-            thread.join();
+            appleThread.join();
+            snakeThread.join();
+            colisionThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    public void tick ()
+    public void colisionCheck()
     {
-        if(snakeBody.size()==0)
+        if(xCor < 0 || xCor > 29 || yCor < 0 || yCor > 29)
         {
-            for(int i=1;i<=size;i++)
-            {
-                body = new Body(xCor+i, yCor, 20);
-                snakeBody.add(body);
-            }
+            System.out.println("Colision");
+            stop();
         }
 
+        for(int i=0;i<snakeBody.size();i++)
+        {
+            if(xCor == snakeBody.get(i).getxCor() && yCor == snakeBody.get(i).getyCor() )
+            {
+                if(i != snakeBody.size()-1)
+                {
+                    System.out.println("Colision");
+                    stop();
+                }
+            }
+        }
+    }
 
-
-        if (right) xCor++;
-        if (left) xCor--;
-        if (up) yCor--;
-        if (down) yCor++;
-
-        body = new Body(xCor, yCor, 20);
-        snakeBody.add(body);
-        snakeBody.remove(0);
-
+    public void apple()
+    {
         if(apples.size()==0)
         {
             int xCor = random.nextInt(23);
@@ -101,7 +111,6 @@ public class GamePanel extends JPanel implements  Runnable , KeyListener {
             apple = new Apple(xCor,yCor,20);
             apples.add(apple);
         }
-
 
         for(int i=0;i<apples.size();i++)
         {
@@ -120,23 +129,27 @@ public class GamePanel extends JPanel implements  Runnable , KeyListener {
                 i++;
             }
         }
+    }
 
-        if(xCor < 0 || xCor > 29 || yCor < 0 || yCor > 29)
+    public void runSnake ()
+    {
+        if(snakeBody.size()==0)
         {
-            stop();
-        }
-
-        for(int i=0;i<snakeBody.size();i++)
-        {
-            if(xCor == snakeBody.get(i).getxCor() && yCor == snakeBody.get(i).getyCor() )
+            for(int i=1;i<=size;i++)
             {
-                if(i != snakeBody.size()-1)
-                {
-                    stop();
-                }
+                body = new Body(xCor+i, yCor, 20);
+                snakeBody.add(body);
             }
         }
 
+        if (right) xCor++;
+        if (left) xCor--;
+        if (up) yCor--;
+        if (down) yCor++;
+
+        body = new Body(xCor, yCor, 20);
+        snakeBody.add(body);
+        snakeBody.remove(0);
     }
 
     public void paint (Graphics g)
@@ -168,22 +181,7 @@ public class GamePanel extends JPanel implements  Runnable , KeyListener {
 
     }
 
-    @Override
-    public void run() {
 
-        while (run)
-        {
-            lock.lock();
-            tick();
-            lock.unlock();
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
 
     @Override
     public void keyTyped(KeyEvent e) {

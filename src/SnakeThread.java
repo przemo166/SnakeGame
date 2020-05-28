@@ -1,11 +1,7 @@
-import java.util.ArrayList;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
-public class MyThread extends Thread {
+public class SnakeThread extends Thread {
     private final GamePanel game;
 
-    public MyThread(GamePanel game) {
+    public SnakeThread(GamePanel game) {
         this.game = game;
     }
 
@@ -13,9 +9,9 @@ public class MyThread extends Thread {
         try {
             for (; ; ) {
                 game.lock.lock();
-                game.repaint();
+                game.runSnake();
                 game.lock.unlock();
-                Thread.sleep(100);
+                Thread.sleep(500);
             }
         } catch (InterruptedException e) {
             System.out.println("sleep interrupted");
