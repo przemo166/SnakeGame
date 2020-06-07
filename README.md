@@ -12,5 +12,5 @@
 | 4 | javac | javac 14.0.1 |
 | 5 | GUI | Swing |
 | 6 | IDE | IntelliJ IDEA 2020.1.1 (Community Edition) |
-
+| 7 | Documentation | JavaDoc |
 
