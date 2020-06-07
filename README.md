@@ -16,7 +16,7 @@
 | 6 | IDE | IntelliJ IDEA 2020.1.1 (Community Edition) |
 | 7 | Documentation | JavaDoc |    
 
-Program realizuje znaną wszystkim i bardzo popularną grę typu Snake. W naszej realizacji gry tytułowy wąż, co oczywiste, zwiększa swój rozmiar po zjedzeniu jabłka oraz dodano w miarę zdobywania punktów przez gracza zwiększanie prędkości poruszania się obiektu. Kolizja o własne ciało oraz o ściany działa prawidłowo.    
+Program realizuje znaną wszystkim i bardzo popularną grę typu Snake. W naszej realizacji gry tytułowy wąż, co oczywiste, zwiększa swój rozmiar po zjedzeniu jabłka oraz dodano w miarę zdobywania punktów przez gracza zwiększanie prędkości poruszania się obiektu. Kolizja o własne ciało oraz o ściany działa prawidłowo.      
 Gra jest napisana wielowątkowo, można wyróżnić wątki dla :
 - Jabłka (AppleThread)
 - Sprawdzania kolizji (ColisionCheckThread)
