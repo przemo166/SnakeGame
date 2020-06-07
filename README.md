@@ -1,6 +1,6 @@
 # Snake
 
-![Test Image 1](github_images/ss.PNG)
+![Test Image 1](github_images/ss.png)
 
 # Demo
 
