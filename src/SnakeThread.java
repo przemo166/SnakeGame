@@ -1,3 +1,4 @@
+/** Klasa wątku węża */
 public class SnakeThread extends Thread {
     private final GamePanel game;
 
@@ -9,9 +10,10 @@ public class SnakeThread extends Thread {
         try {
             for (; ; ) {
                 game.lock.lock();
+                // obsługa metody dla węża
                 game.runSnake();
                 game.lock.unlock();
-                Thread.sleep(500);
+                Thread.sleep(game.returnSpeed());
             }
         } catch (InterruptedException e) {
             System.out.println("sleep interrupted");

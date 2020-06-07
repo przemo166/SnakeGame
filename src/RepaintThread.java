@@ -1,4 +1,5 @@
- public class RepaintThread extends Thread {
+/** Klasa wątku odświeżania planszy */
+public class RepaintThread extends Thread {
         private final GamePanel game;
 
         public RepaintThread(GamePanel game) {
@@ -9,6 +10,7 @@
             try {
                 for (; ; ) {
                     game.lock.lock();
+                    // obsługa odświeżania planszy
                     game.repaint();
                     game.lock.unlock();
                     Thread.sleep(5);

@@ -1,3 +1,4 @@
+/** Klasa wątku jabłka */
 public class AppleThread extends Thread {
     private final GamePanel game;
 
@@ -9,6 +10,7 @@ public class AppleThread extends Thread {
         try {
             for (; ; ) {
                 game.lock.lock();
+                // obsługa metody dla jabłka
                 game.apple();
                 game.lock.unlock();
                 Thread.sleep(5);
