@@ -16,12 +16,8 @@
 
 # Informacja o programie
 
-Program realizuje znaną wszystkim i bardzo popularną grę typu Snake.   
-W naszej realizacji gry tytułowy wąż, co oczywiste, zwiększa swój rozmiar po zjedzeniu jabłka oraz dodano w miarę zdobywania punktów przez gracza zwiększanie prędkości poruszania się obiektu.  
-Kolizja o własne ciało oraz o ściany działa prawidłowo.    
-    
-Gra jest napisana wielowątkowo.   
-Można wyróżnić wątki dla :
+Program realizuje znaną wszystkim i bardzo popularną grę typu Snake. W naszej realizacji gry tytułowy wąż, co oczywiste, zwiększa swój rozmiar po zjedzeniu jabłka oraz dodano w miarę zdobywania punktów przez gracza zwiększanie prędkości poruszania się obiektu. Kolizja o własne ciało oraz o ściany działa prawidłowo.    
+Gra jest napisana wielowątkowo, można wyróżnić wątki dla :
 - Jabłka (AppleThread)
 - Sprawdzania kolizji (ColisionCheckThread)
 - Odświeżania planszy (RepaintThread)
